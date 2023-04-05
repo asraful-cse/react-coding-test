@@ -43,7 +43,7 @@ const Problem1 = () => {
                         <thead>
                         <tr>
                             <th scope="col">Name</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">Statuss</th>
                         </tr>
                         </thead>
                         <tbody>
