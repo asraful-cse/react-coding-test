@@ -25,7 +25,19 @@ const Problem1 = () => {
         setUserItems(NameItems);
       };
 
-
+      const itemShowAll = () => {
+        const active = JSON.parse(localStorage.getItem("userItems")).filter(
+          (item) => item.status === "Active"
+        );
+        const completed = JSON.parse(localStorage.getItem("userItems")).filter(
+          (item) => item.status === "Completed"
+        );
+        const other = JSON.parse(localStorage.getItem("userItems")).filter(
+          (item) => item.status !== "Active" && item.status !== "Completed"
+        );
+        const all = [...active, ...completed, ...other];
+        setUserNewItems(all);
+      };
 
      const handleClick = (type) =>{
         setShow(type);
