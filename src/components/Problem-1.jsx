@@ -3,9 +3,40 @@ import React, {useState} from 'react';
 const Problem1 = () => {
 
     const [show, setShow] = useState('all');
+    const [userItems, setUserItems] = useState({});
+    const [userNewItems, setUserNewItems] = useState([]);
 
-    const handleClick = (val) =>{
-        setShow(val);
+      const handleSubmit = (event) => {
+        event.preventDefault();
+        const allNewItems = [...userNewItems, userItems];
+        // console.log(allNewItems);
+        setUserNewItems(allNewItems);
+        localStorage.setItem("userItems", JSON.stringify(allNewItems));
+        itemShowAll();
+      };
+
+      const handleFeildValue = (event) => {
+        const fieldName = event.target.name;
+        // console.log(fieldName);
+        const fieldValue = event.target.value;
+        // console.log(fieldValue);
+        const NameItems = { ...userItems };
+        NameItems[fieldName] = fieldValue;
+        setUserItems(NameItems);
+      };
+
+
+
+     const handleClick = (type) =>{
+        setShow(type);
+        if (type === "all") {
+          itemShowAll();
+        } else {
+          const typeUser = JSON.parse(localStorage.getItem("userItems")).filter(
+            (item) =>  item?.status?.toLowerCase() === type
+          );
+          setUserNewItems(typeUser);
+        }
     }
 
     return (
@@ -14,12 +45,15 @@ const Problem1 = () => {
             <div className="row justify-content-center mt-5">
                 <h4 className='text-center text-uppercase mb-5'>Problem-1</h4>
                 <div className="col-6 ">
-                    <form className="row gy-2 gx-3 align-items-center mb-4">
+                    <form className="row gy-2 gx-3 align-items-center mb-4" onSubmit={handleSubmit}>
                         <div className="col-auto">
-                            <input type="text" className="form-control" placeholder="Name"/>
+                            <input type="text" className="form-control" placeholder="Name"
+                            name="name"
+                            onChange={handleFeildValue}
+                            />
                         </div>
                         <div className="col-auto">
-                            <input type="text" className="form-control" placeholder="Status"/>
+                            <input type="text" className="form-control" placeholder="Status"  name="status" onChange={handleFeildValue}/>
                         </div>
                         <div className="col-auto">
                             <button type="submit" className="btn btn-primary">Submit</button>
@@ -43,11 +77,17 @@ const Problem1 = () => {
                         <thead>
                         <tr>
                             <th scope="col">Name</th>
-                            <th scope="col">Statuss</th>
+                            <th scope="col">Status</th>
                         </tr>
                         </thead>
                         <tbody>
-                        
+                        {userNewItems ? userNewItems.map((item, idx) => (
+                          <tr key={idx}>
+                             <td>{item.name}</td>
+                             <td>{item.status}</td>
+                          </tr>
+                           ))
+                          : <></>}
                         </tbody>
                     </table>
                 </div>
